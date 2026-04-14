@@ -1,6 +1,18 @@
 const display = document.getElementById("display");
 
 function appendValue(value) {
+  const operators = ["+", "-", "*", "/", "%"];
+  const lastChar = display.value.slice(-1);
+
+  if (operators.includes(value)) {
+    if (display.value === "") return;
+
+    if (operators.includes(lastChar)) {
+      display.value = display.value.slice(0, -1) + value;
+      return;
+    }
+  }
+
   display.value += value;
 }
 
@@ -15,6 +27,14 @@ function deleteLast() {
 function calculateResult() {
   try {
     if (display.value.trim() === "") return;
+
+    const lastChar = display.value.slice(-1);
+    const operators = ["+", "-", "*", "/", "%"];
+
+    if (operators.includes(lastChar)) {
+      display.value = display.value.slice(0, -1);
+    }
+
     display.value = eval(display.value);
   } catch (error) {
     display.value = "Error";
