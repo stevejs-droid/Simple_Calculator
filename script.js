@@ -1,11 +1,12 @@
-const display = document.getElementById('display');
+const display = document.getElementById("display");
+const buttons = document.querySelectorAll(".buttons button");
 
 function appendValue(value) {
   display.value += value;
 }
 
 function clearDisplay() {
-  display.value = '';
+  display.value = "";
 }
 
 function deleteLast() {
@@ -14,25 +15,39 @@ function deleteLast() {
 
 function calculateResult() {
   try {
-    if (display.value.trim() === '') {
-      return;
-    }
-    display.value = eval(display.value);
-  } catch (error) {
-    display.value = 'Error';
+    if (display.value.trim() === "") return;
+    display.value = Function("return " + display.value)();
+  } catch {
+    display.value = "Error";
   }
 }
 
-document.addEventListener('keydown', function (event) {
+buttons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const value = button.dataset.value;
+
+    if (value === "C") {
+      clearDisplay();
+    } else if (value === "back") {
+      deleteLast();
+    } else if (value === "=") {
+      calculateResult();
+    } else {
+      appendValue(value);
+    }
+  });
+});
+
+document.addEventListener("keydown", (event) => {
   const key = event.key;
 
-  if ((key >= '0' && key <= '9') || ['+', '-', '*', '/', '.', '%'].includes(key)) {
+  if ((key >= "0" && key <= "9") || ["+", "-", "*", "/", ".", "%"].includes(key)) {
     appendValue(key);
-  } else if (key === 'Enter') {
+  } else if (key === "Enter") {
     calculateResult();
-  } else if (key === 'Backspace') {
+  } else if (key === "Backspace") {
     deleteLast();
-  } else if (key === 'Escape') {
+  } else if (key === "Escape") {
     clearDisplay();
   }
 });
