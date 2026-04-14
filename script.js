@@ -1,17 +1,38 @@
-function getValues() {
-    let n1 = parseFloat(document.getElementById("num1").value) || 0;
-    let n2 = parseFloat(document.getElementById("num2").value) || 0;
-    return [n1, n2];
+const display = document.getElementById('display');
+
+function appendValue(value) {
+  display.value += value;
 }
 
-function add() {
-    let [n1, n2] = getValues();
-    let result = n1 + n2;
-    document.getElementById("result").innerText = "Result = " + result;
+function clearDisplay() {
+  display.value = '';
 }
 
-function subtract() {
-    let [n1, n2] = getValues();
-    let result = n1 - n2;
-    document.getElementById("result").innerText = "Result = " + result;
+function deleteLast() {
+  display.value = display.value.slice(0, -1);
 }
+
+function calculateResult() {
+  try {
+    if (display.value.trim() === '') {
+      return;
+    }
+    display.value = eval(display.value);
+  } catch (error) {
+    display.value = 'Error';
+  }
+}
+
+document.addEventListener('keydown', function (event) {
+  const key = event.key;
+
+  if ((key >= '0' && key <= '9') || ['+', '-', '*', '/', '.', '%'].includes(key)) {
+    appendValue(key);
+  } else if (key === 'Enter') {
+    calculateResult();
+  } else if (key === 'Backspace') {
+    deleteLast();
+  } else if (key === 'Escape') {
+    clearDisplay();
+  }
+});
