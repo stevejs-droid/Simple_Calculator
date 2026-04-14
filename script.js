@@ -1,5 +1,4 @@
 const display = document.getElementById("display");
-const buttons = document.querySelectorAll(".buttons button");
 
 function appendValue(value) {
   display.value += value;
@@ -16,29 +15,13 @@ function deleteLast() {
 function calculateResult() {
   try {
     if (display.value.trim() === "") return;
-    display.value = Function("return " + display.value)();
-  } catch {
+    display.value = eval(display.value);
+  } catch (error) {
     display.value = "Error";
   }
 }
 
-buttons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const value = button.dataset.value;
-
-    if (value === "C") {
-      clearDisplay();
-    } else if (value === "back") {
-      deleteLast();
-    } else if (value === "=") {
-      calculateResult();
-    } else {
-      appendValue(value);
-    }
-  });
-});
-
-document.addEventListener("keydown", (event) => {
+document.addEventListener("keydown", function (event) {
   const key = event.key;
 
   if ((key >= "0" && key <= "9") || ["+", "-", "*", "/", ".", "%"].includes(key)) {
